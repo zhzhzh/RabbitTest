@@ -1,3 +1,5 @@
+package worker;
+
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.Channel;
@@ -32,7 +34,7 @@ public class NewTask {
                         TASK_QUEUE_NAME,
                         MessageProperties.PERSISTENT_TEXT_PLAIN,
                         message.getBytes("UTF-8"));
-                System.out.println(" [x] Send '" + message + "'");
+                System.out.println(" [x] hello.Send '" + message + "'");
             }
         }
     }

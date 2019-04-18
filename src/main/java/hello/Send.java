@@ -1,3 +1,5 @@
+package hello;
+
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.Channel;
@@ -16,7 +18,7 @@ public class Send {
             channel.queueDeclare(QUEUE_NAME, false, false, false, null);
             String message = "Hello World!";
             channel.basicPublish("", QUEUE_NAME, null, message.getBytes());
-            System.out.println(" [x] Send '" + message + "'");
+            System.out.println(" [x] hello.Send '" + message + "'");
         }
     }
 
