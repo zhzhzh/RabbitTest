@@ -9,7 +9,7 @@ public class EmitLogTopic {
 
     private static final String EXCHANGE_NAME = "topic_logs";
 
-    private static void main(String[] argv) throws Exception {
+    public static void main(String[] argv) throws Exception {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("localhost");
         factory.setUsername("rabbit");
