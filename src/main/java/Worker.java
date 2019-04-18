@@ -5,7 +5,7 @@ import com.rabbitmq.client.DeliverCallback;
 
 public class Worker {
 
-    private final static String QUEUE_NAME = "task_queue";
+    private final static String TASK_QUEUE_NAME = "task_queue";
 
     public static void main(String[] argv) throws Exception {
         ConnectionFactory factory = new ConnectionFactory();
@@ -16,8 +16,7 @@ public class Worker {
         Connection connection = factory.newConnection();
         Channel channel = connection.createChannel();
 
-        boolean durable = true;
-        channel.queueDeclare(QUEUE_NAME, durable, false, false, null);
+        channel.queueDeclare(TASK_QUEUE_NAME, true, false, false, null);
         System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
 
         channel.basicQos(1); // accept only one unack-ed message at a time (see below)
@@ -28,8 +27,6 @@ public class Worker {
             System.out.println(" [x] Received '" + message + "'");
             try {
                 doWork(message);
-            } catch (InterruptedException e) {
-                System.out.println(e.getMessage());
             }
             finally {
                 System.out.println(" [x] Done");
@@ -37,14 +34,19 @@ public class Worker {
             }
         };
 
-        boolean autoAck = false; // acknowledgment is covered below
-        channel.basicConsume(QUEUE_NAME, autoAck, deliverCallback, consumerTag -> { });
+        channel.basicConsume(TASK_QUEUE_NAME, false, deliverCallback, consumerTag -> { });
 
     }
 
-    private static void doWork(String task) throws InterruptedException {
+    private static void doWork(String task) {
         for (char ch: task.toCharArray()) {
-            if (ch == '.') Thread.sleep(1000);
+            if (ch == '.') {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException _ignored) {
+                    Thread.currentThread().interrupt();
+                }
+            }
         }
     }
 }
