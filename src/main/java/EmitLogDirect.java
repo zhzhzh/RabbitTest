@@ -13,7 +13,7 @@ public class EmitLogDirect {
         factory.setUsername("rabbit");
         factory.setPassword("rabbit12345");
         try (Connection connection = factory.newConnection();
-        Channel channel = connection.createChannel()) {
+             Channel channel = connection.createChannel()) {
             channel.exchangeDeclare(EXCHANGE_NAME, BuiltinExchangeType.DIRECT);
 
             String severity = getSeverity(argv);
